@@ -1,2 +1,3 @@
 [workspace]
 members = ["data-collector", "crypto"]
+default-members = ["data-collector", "crypto"]
