@@ -6,3 +6,5 @@ edition = "2021"
 authors = ["Jiseok CHOI <jiseok.dev@gmail.com>"]
 
 [dependencies]
+gluesql = { version = "0.10.2" }
+thiserror = "1"
