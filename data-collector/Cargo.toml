@@ -1,0 +1,8 @@
+[package]
+name = "data-collector"
+description = "TODO: write description"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jiseok CHOI <jiseok.dev@gmail.com>"]
+
+[dependencies]

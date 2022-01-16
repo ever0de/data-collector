@@ -1,8 +1,2 @@
-[package]
-name = "crypto-data-collector"
-version = "0.1.0"
-edition = "2021"
-authors = ["Jiseok CHOI <jiseok.dev@gmail.com>"]
-
-
-[dependencies]
+[workspace]
+members = ["data-collector", "crypto"]
