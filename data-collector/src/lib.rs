@@ -1,24 +1,46 @@
 use {
-    gluesql::core::store::{GStore, GStoreMut},
-    std::fmt::Debug,
-    std::marker::PhantomData,
+    gluesql::{
+        core::store::{GStore, GStoreMut},
+        prelude::Glue,
+    },
+    std::{fmt::Debug, marker::PhantomData},
 };
 
 pub mod error;
 pub mod result;
 
-use result::Result;
+pub use result::Result;
 
-pub struct DataCollector<Row: Debug, Write: GStoreMut<Row>, Read: GStore<Row>> {
-    pub write: Write,
-    pub read: Read,
+pub struct DataCollector<Row: Debug, Storage: GStore<Row> + GStoreMut<Row>> {
+    pub glue: Glue<Row, Storage>,
     _marker: PhantomData<Row>,
 }
 
-pub trait Scan<Row> {
-    fn scan(&self) -> Result<Box<dyn Iterator<Item = Row>>>;
+impl<Row: Debug, Storage: GStore<Row> + GStoreMut<Row>> DataCollector<Row, Storage> {
+    pub fn new(storage: Storage) -> Self {
+        Self {
+            glue: Glue::new(storage),
+            _marker: PhantomData,
+        }
+    }
 }
 
-pub trait Save<Row> {
+pub trait Scan<Row: Debug> {
+    fn scan(&self, table_name: &str) -> Result<Box<dyn Iterator<Item = Row>>>;
+}
+
+pub trait Save<Row: Debug> {
     fn save(&mut self, row: Row) -> Result<()>;
+}
+
+impl<Row: Debug, Storage: GStore<Row> + GStoreMut<Row>> Scan<Row> for DataCollector<Row, Storage> {
+    fn scan(&self, _table_name: &str) -> Result<Box<dyn Iterator<Item = Row>>> {
+        unimplemented!()
+    }
+}
+
+impl<Row: Debug, Storage: GStore<Row> + GStoreMut<Row>> Save<Row> for DataCollector<Row, Storage> {
+    fn save(&mut self, _row: Row) -> Result<()> {
+        unimplemented!()
+    }
 }
